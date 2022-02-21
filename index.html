@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation Balls</title>
+    <style>
+        canvas{
+            border: solid;
+        }
+        #numBalls{
+            margin-left: 25%;
+            width: 50%;
+        }
+        
+        
+    </style>
+</head>
+<body>
+    <canvas width="500" height="600"></canvas>
+    
+    <input type="range" value="1" name="numBalls" id="numBalls" min="1" max="20">
+    <script>
+        const cnv = document.querySelector("canvas")
+        const ctx = cnv.getContext("2d")
+        var body = document.querySelector("body")
+        body.style.width = cnv.width+"px"
+        var numBalls = 1
+        var balls = []
+        var rastrosBalls = []
+        var range = document.querySelector("#numBalls")
+        range.addEventListener("change", function(){
+            numBalls = range.value
+            balls.splice(0,balls.length)
+            geraBall()
+        })
+        class Ball {
+            constructor(x, y, r, color){
+                this.x = x;
+                this.y = y;
+                this.r = r;
+                this.velX = Math.random()*10;
+                this.velY = Math.random()*10;
+                this.color = "hsl("+color+", 100%, 50%)"
+            }
+            draw(){
+                ctx.beginPath()
+                ctx.fillStyle = this.color
+                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2)
+                ctx.fill()
+                ctx.closePath()
+            }
+            move(){
+                this.y+=this.velY
+                this.x+=this.velX
+                if(this.y >= cnv.height - this.r || this.y <= 0 + this.r){
+                    this.velY*=-1
+                }
+                if(this.x >= cnv.width - this.r || this.x <= 0 + this.r){
+                    this.velX*=-1
+                }
+                this.x = Math.max(0 + this.r, Math.min(this.x, cnv.width - this.r))
+                this.y = Math.max(0 + this.r, Math.min(this.y, cnv.height - this.r))
+            }
+        }
+        class RastroBalls extends Ball{
+
+        }
+        geraBall()
+        function geraBall(){
+            for(let i  = 0 ; i< numBalls; i++){
+                var xRand = Math.random()*cnv.width
+                var yRand = Math.random()*cnv.height
+                var rRand = Math.max(10, Math.random()*15)
+                var colorRand = Math.random()*360
+                balls.push(new Ball(xRand, yRand, rRand, colorRand))
+            }
+        }
+        setInterval(function(){
+            for(let i  = 0 ; i< 10; i++){
+                rastrosBalls.push(new RastroBalls())
+            }
+        }, 100)
+        function loop(){
+            for(b in balls){
+                balls[b].draw()
+                balls[b].move()
+            }
+            for(r in rastrosBalls){
+                rastrosBalls 
+            }
+            requestAnimationFrame(loop)
+        }
+        loop()
+    </script>
+</body>
+</html>
